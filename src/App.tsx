@@ -35,6 +35,7 @@ const App: React.FC = () => {
 
   const [point, setPoint] = useState<number>(0);
   const [screenAlert, setScreenAlert] = useState<string>('');
+
   const [summary, setSummary] = useState<SummaryProp[]>(() => {
     const storedSummary = localStorage.getItem('snakeGameSummary');
     return storedSummary ? JSON.parse(storedSummary) : [];
