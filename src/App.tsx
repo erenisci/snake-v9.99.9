@@ -235,7 +235,7 @@ const App: React.FC = () => {
   // Handle move with faster speed when spacebar is held down
   useEffect(() => {
     let intervalTime = 400;
-    if (isSpacebarPressed) intervalTime = 200;
+    if (isSpacebarPressed) intervalTime = 100;
 
     if (isMoving) {
       const interval = setInterval(() => {
