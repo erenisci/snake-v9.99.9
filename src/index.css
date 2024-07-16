@@ -111,13 +111,13 @@ body {
 }
 
 .start-margin-top {
-  margin-top: 2rem;
+  margin-top: 0.4rem;
 }
 
 .game-board {
   display: flex;
   gap: 2px;
-  margin-top: 3rem;
+  margin-top: 1.5rem;
   flex-direction: column;
   justify-content: center;
   border: 1px solid #555;
@@ -129,9 +129,12 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 2rem;
   width: 100%;
   height: 100%;
+  max-width: 37rem;
+  max-height: 37rem;
   background-color: #e4c8ff;
   color: brown;
   font-size: 24px;
@@ -147,13 +150,27 @@ body {
   margin-bottom: 1rem;
 }
 
-.div-info p {
+.div-info div {
+  display: flex;
+  gap: 0.2rem;
   margin-left: 1rem;
-  margin-top: -0.5rem;
+  margin-top: -1.3rem;
+  width: 22rem;
+}
+
+.div-info p {
+  display: flex;
+  justify-content: space-between;
+  width: 9rem;
+}
+
+.div-info span {
+  justify-self: flex-start;
 }
 
 .div-info p:last-child {
   margin-top: 0;
+  width: auto;
   align-self: center;
 }
 

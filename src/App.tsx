@@ -32,10 +32,10 @@ const App: React.FC = () => {
 
   const [isMoving, setIsMoving] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
+  const [isSpacebarPressed, setIsSpacebarPressed] = useState(false);
 
   const [point, setPoint] = useState<number>(0);
   const [screenAlert, setScreenAlert] = useState<string>('');
-
   const [summary, setSummary] = useState<SummaryProp[]>(() => {
     const storedSummary = localStorage.getItem('snakeGameSummary');
     return storedSummary ? JSON.parse(storedSummary) : [];
@@ -76,15 +76,11 @@ const App: React.FC = () => {
     const size = arr.length;
     const center = Math.floor(size / 2);
 
-    const initialSnake = [
-      { x: center - 1, y: center },
-      { x: center, y: center },
-    ];
+    const initialSnake = [{ x: center - 1, y: center }];
     setSnake(initialSnake);
 
     const newArr = Array.from(Array(size), () => new Array(size).fill(0));
     newArr[center - 1][center] = 1;
-    newArr[center][center] = 1;
 
     let snackPosition = getRandomPosition(size);
     while (isPositionInSnake(snackPosition, initialSnake))
@@ -131,7 +127,7 @@ const App: React.FC = () => {
 
     // for Congratulations or Game Over
     if (
-      point >= arr.length ** 2 * 20 - 60 ||
+      point >= arr.length ** 2 * 20 - 40 ||
       newSnake
         .slice(1)
         .some(segment => segment.x === newHead.x && segment.y === newHead.y)
@@ -144,7 +140,7 @@ const App: React.FC = () => {
         point >= arr.length ** 2 * 20 - 60 ? 'Congratulations!' : 'Game-Over!';
       setScreenAlert(message);
 
-      const newPoint = point >= arr.length ** 2 * 20 - 60 ? point + 20 : point;
+      const newPoint = point >= arr.length ** 2 * 20 - 40 ? point + 20 : point;
       if (message === 'Congratulations!') setPoint(newPoint);
 
       const newSummary = [
@@ -215,20 +211,40 @@ const App: React.FC = () => {
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [isMoving, direction, lastDirection]);
+    const handleSpacebarDown = (e: KeyboardEvent) => {
+      if (e.key === ' ' && !isSpacebarPressed) setIsSpacebarPressed(true);
+    };
 
-  // Handle move
+    const handleSpacebarUp = (e: KeyboardEvent) => {
+      if (e.key === ' ') setIsSpacebarPressed(false);
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+
+    window.addEventListener('keydown', handleSpacebarDown);
+    window.addEventListener('keyup', handleSpacebarUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+
+      window.removeEventListener('keydown', handleSpacebarDown);
+      window.removeEventListener('keyup', handleSpacebarUp);
+    };
+  }, [isMoving, isSpacebarPressed, direction, lastDirection]);
+
+  // Handle move with faster speed when spacebar is held down
   useEffect(() => {
+    let intervalTime = 400;
+    if (isSpacebarPressed) intervalTime = 200;
+
     if (isMoving) {
       const interval = setInterval(() => {
         moveSnake();
-      }, 400);
+      }, intervalTime);
 
       return () => clearInterval(interval);
     }
-  }, [isMoving, moveSnake, arr.length]);
+  }, [isMoving, isSpacebarPressed, moveSnake, arr.length]);
 
   // Load summary from local storage on mount
   useEffect(() => {
@@ -236,7 +252,7 @@ const App: React.FC = () => {
     if (storedSummary) {
       const parsedSummary = JSON.parse(storedSummary).map((entry: any) => ({
         ...entry,
-        date: new Date(entry.date), // Parse date back to Date object
+        date: new Date(entry.date),
       }));
       setSummary(parsedSummary);
     }
