@@ -76,21 +76,21 @@ const App: React.FC = () => {
     const center = Math.floor(size / 2);
 
     const initialSnake = [
+      { x: center - 1, y: center },
       { x: center, y: center },
-      { x: center + 1, y: center },
     ];
     setSnake(initialSnake);
 
     const newArr = Array.from(Array(size), () => new Array(size).fill(0));
+    newArr[center - 1][center] = 1;
     newArr[center][center] = 1;
-    newArr[center + 1][center] = 1;
 
     let snackPosition = getRandomPosition(size);
     while (isPositionInSnake(snackPosition, initialSnake))
       snackPosition = getRandomPosition(size);
 
     setSnack(snackPosition);
-    newArr[snackPosition.y][snackPosition.x] = 2;
+    newArr[snackPosition.x][snackPosition.y] = 2;
 
     setArr(newArr);
     setInfo(false);
@@ -106,16 +106,20 @@ const App: React.FC = () => {
 
     switch (direction) {
       case 'w':
-        newHead.y = head.y === 0 ? arr.length - 1 : head.y - 1;
-        break;
-      case 'a':
+      case 'ArrowUp':
         newHead.x = head.x === 0 ? arr.length - 1 : head.x - 1;
         break;
+      case 'a':
+      case 'ArrowLeft':
+        newHead.y = head.y === 0 ? arr.length - 1 : head.y - 1;
+        break;
       case 's':
-        newHead.y = (head.y + 1) % arr.length;
+      case 'ArrowDown':
+        newHead.x = (head.x + 1) % arr.length;
         break;
       case 'd':
-        newHead.x = (head.x + 1) % arr.length;
+      case 'ArrowRight':
+        newHead.y = (head.y + 1) % arr.length;
         break;
       default:
         return;
@@ -131,7 +135,6 @@ const App: React.FC = () => {
         .slice(1)
         .some(segment => segment.x === newHead.x && segment.y === newHead.y)
     ) {
-      setPoint(point => point + 20);
       setIsMoving(false);
       setDirection(null);
       setLastDirection(null);
@@ -140,11 +143,12 @@ const App: React.FC = () => {
         point >= arr.length ** 2 * 20 - 60 ? 'Congratulations!' : 'Game-Over!';
       setScreenAlert(message);
 
-      if (message === 'Congratulations!') setPoint(point => point + 20);
+      const newPoint = point >= arr.length ** 2 * 20 - 60 ? point + 20 : point;
+      if (message === 'Congratulations!') setPoint(newPoint);
 
       const newSummary = [
         ...summary,
-        { point, size: arr.length, date: new Date() },
+        { point: newPoint, size: arr.length, date: new Date() },
       ];
       setSummary(newSummary);
       return;
@@ -159,11 +163,11 @@ const App: React.FC = () => {
         snackPosition = getRandomPosition(arr.length);
       }
       setSnack(snackPosition);
-      newArr[snackPosition.y][snackPosition.x] = 2;
+      newArr[snackPosition.x][snackPosition.y] = 2;
     }
 
     newArr.forEach((row, _) => row.fill(0));
-    newSnake.forEach(segment => (newArr[segment.y][segment.x] = 1));
+    newSnake.forEach(segment => (newArr[segment.x][segment.y] = 1));
 
     setSnake(newSnake);
     setArr(newArr);
@@ -173,15 +177,35 @@ const App: React.FC = () => {
   // Keyboard events
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (!direction && !isMoving && e.key !== 's') setIsMoving(true);
+      if (!direction && !isMoving && e.key !== 's' && e.key !== 'ArrowDown')
+        setIsMoving(true);
       else if (!isMoving) return;
 
-      if (e.key === 'w' || e.key === 'a' || e.key === 's' || e.key === 'd') {
+      const validKeys = [
+        'ArrowUp',
+        'w',
+        'ArrowLeft',
+        'a',
+        'ArrowDown',
+        's',
+        'ArrowRight',
+        'd',
+      ];
+      if (validKeys.includes(e.key)) {
         if (
-          (lastDirection === 'w' && e.key === 's') ||
-          (lastDirection === 's' && e.key === 'w') ||
-          (lastDirection === 'a' && e.key === 'd') ||
-          (lastDirection === 'd' && e.key === 'a') ||
+          (lastDirection === 'w' && (e.key === 's' || e.key === 'ArrowDown')) ||
+          (lastDirection === 'ArrowUp' &&
+            (e.key === 's' || e.key === 'ArrowDown')) ||
+          (lastDirection === 'a' &&
+            (e.key === 'd' || e.key === 'ArrowRight')) ||
+          (lastDirection === 'ArrowLeft' &&
+            (e.key === 'd' || e.key === 'ArrowRight')) ||
+          (lastDirection === 's' && (e.key === 'w' || e.key === 'ArrowUp')) ||
+          (lastDirection === 'ArrowDown' &&
+            (e.key === 'w' || e.key === 'ArrowUp')) ||
+          (lastDirection === 'd' && (e.key === 'a' || e.key === 'ArrowLeft')) ||
+          (lastDirection === 'ArrowRight' &&
+            (e.key === 'a' || e.key === 'ArrowLeft')) ||
           e.key === lastDirection
         )
           return;
@@ -280,13 +304,13 @@ const App: React.FC = () => {
               <CellRows key={i}>
                 {row.map((cell, j) => {
                   const isHeadSnake =
-                    snake.length > 0 && i === snake[0]?.y && j === snake[0]?.x;
+                    snake.length > 0 && i === snake[0]?.x && j === snake[0]?.y;
                   return (
                     <Cells
                       key={`${i}${j}`}
                       isSnake={cell === 1}
                       isHeadSnake={isHeadSnake}
-                      isSnack={snack?.x === j && snack?.y === i}
+                      isSnack={snack?.x === i && snack?.y === j}
                     />
                   );
                 })}

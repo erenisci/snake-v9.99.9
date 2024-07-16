@@ -174,6 +174,7 @@ body {
   align-items: center;
   gap: 2rem;
   font-size: 2rem;
+  min-width: 20rem;
   color: blueviolet;
   padding: 2rem;
   width: 60%;
@@ -197,7 +198,7 @@ body {
   width: 100%;
   padding: 0.4rem;
   border: 1px solid blueviolet;
-  height: 27.6rem;
+  height: 27.8rem;
   overflow-y: scroll;
 }
 

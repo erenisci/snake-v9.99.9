@@ -12,7 +12,7 @@ const Form: React.FC<Props> = ({ selectElement, onClick }) => {
     <form className='select-form'>
       <label>Size:</label>
       <select ref={selectElement}>
-        {Array.from({ length: 10 }, (_, i) => 11 + i * 2).map(opt => (
+        {Array.from({ length: 11 }, (_, i) => 10 + i * 2).map(opt => (
           <option
             key={opt}
             value={opt}

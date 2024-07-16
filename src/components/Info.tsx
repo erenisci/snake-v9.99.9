@@ -5,16 +5,16 @@ const Info: React.FC = () => {
     <div className='div-info'>
       <h2>How to play?</h2>
       <p>
-        <strong>W</strong>: to go top,
+        <strong>W or &uarr;</strong>: to go top,
       </p>
       <p>
-        <strong>A</strong>: to go left,
+        <strong>A or &larr;</strong>: to go left,
       </p>
       <p>
-        <strong>S</strong>: to go down,
+        <strong>S or &darr;</strong>: to go down,
       </p>
       <p>
-        <strong>D</strong>: to go right.
+        <strong>D or &rarr;</strong>: to go right.
       </p>
       <p>Good Luck :)</p>
     </div>
