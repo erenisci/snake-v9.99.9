@@ -1,3 +1,18 @@
+:root {
+  --snack-c: #de7979;
+  --snake-head-c: #e04a4a;
+  --snake-body-c: #992f2f;
+  --background-c: #d0f7b2;
+  --background-c-dark: #3f5740;
+  --border: #a73c3c;
+  --board-c: #7dad69;
+  --main-c: #556f44;
+  --white: #ccc;
+  --white-light: #eee;
+  --black: #333;
+  --onetime-use: #b8da9f;
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -14,7 +29,7 @@ body {
   line-height: 1;
   font-weight: 400;
   color: #555;
-  background-color: #f3e6ff;
+  background-color: var(--background-c);
 }
 
 ::-webkit-scrollbar {
@@ -34,7 +49,7 @@ body {
   display: flex;
   align-items: center;
   font-size: 16px;
-  color: blueviolet;
+  color: var(--main-c);
   position: relative;
 }
 
@@ -44,7 +59,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  color: blueviolet;
+  color: var(--main-c);
   position: relative;
 }
 
@@ -73,7 +88,7 @@ body {
 .title {
   font-size: 32px;
   font-weight: 800;
-  color: blueviolet;
+  color: var(--main-c);
 }
 
 .select-form {
@@ -85,29 +100,31 @@ body {
 }
 
 .select-form label {
-  color: blueviolet;
+  color: var(--main-c);
 }
 
 .select-form select {
   font-size: 12px;
   padding: 0.6rem;
-  border: 1px solid blueviolet;
-  background-color: #d4a9ff;
+  border: 1px solid var(--main-c);
+  border-radius: 9px;
+  background-color: var(--white-light);
 }
 
 .select-form-btn {
   font-size: 16px;
   padding: 0.5rem;
-  border: 1px solid blueviolet;
-  background-color: #d4a9ff;
+  border: 1px solid var(--main-c);
+  background-color: var(--white-light);
   transition: all 450ms;
+  border-radius: 9px;
 }
 
 .select-form-btn:hover,
 .select-form-btn:active {
-  background-color: blueviolet;
+  background-color: var(--main-c);
   border: 1px solid d4a9ff;
-  color: #f3e6ff;
+  color: var(--white-light);
 }
 
 .start-margin-top {
@@ -120,7 +137,8 @@ body {
   margin-top: 1.5rem;
   flex-direction: column;
   justify-content: center;
-  border: 1px solid #555;
+  background-color: var(--board-c);
+  border: 1px solid var(--main-c);
   padding: 0.4rem;
   position: relative;
 }
@@ -135,12 +153,12 @@ body {
   height: 100%;
   max-width: 37rem;
   max-height: 37rem;
-  background-color: #e4c8ff;
-  color: brown;
+  background-color: var(--onetime-use);
+  color: var(--background-c-dark);
   font-size: 24px;
   top: 50%;
   left: 50%;
-  border: 1px solid brown;
+  border: 1px solid var(--background-c-dark);
   transform: translate(-50%, -50%);
   position: absolute;
 }
@@ -182,23 +200,24 @@ body {
 }
 
 .how-to-play {
-  padding: 0.3rem;
+  padding: 0.48rem;
 }
 
 .game-ends {
+  z-index: 999;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
   font-size: 2rem;
   min-width: 20rem;
-  color: blueviolet;
+  color: var(--background-c-dark);
   padding: 2rem;
   width: 60%;
-  background-color: #e4c8ff;
+  background-color: var(--white);
   top: 50%;
   left: 50%;
-  border: 1px solid brown;
+  border: 1px solid var(--background-c-dark);
   transform: translate(-50%, -50%);
   position: absolute;
 }
@@ -213,8 +232,9 @@ body {
   flex-direction: column;
   gap: 2px;
   width: 100%;
+  background-color: var(--board-c);
   padding: 0.4rem;
-  border: 1px solid blueviolet;
+  border: 1px solid var(--main-c);
   height: 27.8rem;
   overflow-y: scroll;
 }
@@ -224,9 +244,10 @@ body {
   font-weight: 600;
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
   padding: 0.8rem;
-  border: 1px solid blueviolet;
+  border: 1px solid var(--main-c);
 }
 
 .summary {
@@ -234,8 +255,9 @@ body {
   flex-direction: column;
   justify-content: center;
   gap: 0.6rem;
-  padding: 0.8rem;
-  border: 1px solid #d4a9ff;
+  padding: 0.9rem;
+  background-color: var(--main-c);
+  color: var(--white);
 }
 
 .summary--p {
@@ -250,23 +272,128 @@ body {
 .cell {
   width: 24px;
   height: 24px;
-  background-color: blueviolet;
-}
-
-.snake {
-  width: 24px;
-  height: 24px;
-  background-color: rgb(165, 42, 42);
-}
-
-.snake-head {
-  width: 24px;
-  height: 24px;
-  background-color: rgb(204, 53, 53);
+  background-color: var(--main-c);
 }
 
 .snack {
   width: 24px;
   height: 24px;
-  background-color: rgb(36, 36, 36);
+  background-color: var(--snack-c);
+  border: 1px solid var(--white);
+}
+
+.snake {
+  width: 24px;
+  height: 24px;
+  background-color: var(--snake-body-c);
+  border: 1px solid var(--white);
+}
+
+.snake-face {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  background-color: var(--snake-head-c);
+  border: 1px solid var(--white);
+}
+
+.eye {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background-color: var(--white-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &::before {
+    content: '';
+    width: 3px;
+    height: 3px;
+    background-color: var(--black);
+  }
+}
+
+.left-eye--w {
+  bottom: 20%;
+  left: 20%;
+}
+
+.right-eye--w {
+  bottom: 20%;
+  right: 20%;
+}
+
+.tongue--w {
+  border: 1px solid var(--white);
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 4px;
+  background-color: var(--snake-body-c);
+}
+
+.left-eye--a {
+  bottom: 20%;
+  right: 20%;
+}
+
+.right-eye--a {
+  top: 20%;
+  right: 20%;
+}
+
+.tongue--a {
+  border: 1px solid var(--white);
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 8px;
+  background-color: var(--snake-body-c);
+}
+
+.left-eye--s {
+  top: 20%;
+  left: 20%;
+}
+
+.right-eye--s {
+  top: 20%;
+  right: 20%;
+}
+
+.tongue--s {
+  border: 1px solid var(--white);
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 4px;
+  background-color: var(--snake-body-c);
+}
+
+.left-eye--d {
+  top: 20%;
+  left: 20%;
+}
+
+.right-eye--d {
+  bottom: 20%;
+  left: 20%;
+}
+
+.tongue--d {
+  border: 1px solid var(--white);
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 8px;
+  background-color: var(--snake-body-c);
 }

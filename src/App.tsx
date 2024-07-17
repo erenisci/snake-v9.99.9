@@ -29,6 +29,7 @@ const App: React.FC = () => {
 
   const [direction, setDirection] = useState<string | null>(null);
   const [lastDirection, setLastDirection] = useState<string | null>(null);
+  const [keyPressed, setKeyPressed] = useState(false);
 
   const [isMoving, setIsMoving] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
@@ -133,14 +134,13 @@ const App: React.FC = () => {
         .some(segment => segment.x === newHead.x && segment.y === newHead.y)
     ) {
       setIsMoving(false);
-      setDirection(null);
       setLastDirection(null);
 
       const message =
         point >= arr.length ** 2 * 20 - 60 ? 'Congratulations!' : 'Game-Over!';
       setScreenAlert(message);
 
-      const newPoint = point >= arr.length ** 2 * 20 - 40 ? point + 20 : point;
+      const newPoint = point >= arr.length ** 2 * 20 - 40 ? point + 40 : point;
       if (message === 'Congratulations!') setPoint(newPoint);
 
       const newSummary = [
@@ -166,6 +166,7 @@ const App: React.FC = () => {
     newArr.forEach((row, _) => row.fill(0));
     newSnake.forEach(segment => (newArr[segment.x][segment.y] = 1));
 
+    setKeyPressed(false);
     setSnake(newSnake);
     setArr(newArr);
     setLastDirection(direction);
@@ -174,40 +175,44 @@ const App: React.FC = () => {
   // Keyboard events
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (!direction && !isMoving && e.key !== 's' && e.key !== 'ArrowDown')
-        setIsMoving(true);
+      if (!direction && !isMoving) setIsMoving(true);
       else if (!isMoving) return;
 
-      const validKeys = [
-        'ArrowUp',
-        'w',
-        'ArrowLeft',
-        'a',
-        'ArrowDown',
-        's',
-        'ArrowRight',
-        'd',
-      ];
-      if (validKeys.includes(e.key)) {
-        if (
-          (lastDirection === 'w' && (e.key === 's' || e.key === 'ArrowDown')) ||
-          (lastDirection === 'ArrowUp' &&
-            (e.key === 's' || e.key === 'ArrowDown')) ||
-          (lastDirection === 'a' &&
-            (e.key === 'd' || e.key === 'ArrowRight')) ||
-          (lastDirection === 'ArrowLeft' &&
-            (e.key === 'd' || e.key === 'ArrowRight')) ||
-          (lastDirection === 's' && (e.key === 'w' || e.key === 'ArrowUp')) ||
-          (lastDirection === 'ArrowDown' &&
-            (e.key === 'w' || e.key === 'ArrowUp')) ||
-          (lastDirection === 'd' && (e.key === 'a' || e.key === 'ArrowLeft')) ||
-          (lastDirection === 'ArrowRight' &&
-            (e.key === 'a' || e.key === 'ArrowLeft')) ||
-          e.key === lastDirection
-        )
-          return;
+      if (!keyPressed) {
+        const validKeys = [
+          'ArrowUp',
+          'w',
+          'ArrowLeft',
+          'a',
+          'ArrowDown',
+          's',
+          'ArrowRight',
+          'd',
+        ];
+        if (validKeys.includes(e.key)) {
+          if (
+            (lastDirection === 'w' &&
+              (e.key === 's' || e.key === 'ArrowDown')) ||
+            (lastDirection === 'ArrowUp' &&
+              (e.key === 's' || e.key === 'ArrowDown')) ||
+            (lastDirection === 'a' &&
+              (e.key === 'd' || e.key === 'ArrowRight')) ||
+            (lastDirection === 'ArrowLeft' &&
+              (e.key === 'd' || e.key === 'ArrowRight')) ||
+            (lastDirection === 's' && (e.key === 'w' || e.key === 'ArrowUp')) ||
+            (lastDirection === 'ArrowDown' &&
+              (e.key === 'w' || e.key === 'ArrowUp')) ||
+            (lastDirection === 'd' &&
+              (e.key === 'a' || e.key === 'ArrowLeft')) ||
+            (lastDirection === 'ArrowRight' &&
+              (e.key === 'a' || e.key === 'ArrowLeft')) ||
+            e.key === lastDirection
+          )
+            return;
 
-        setDirection(e.key);
+          setDirection(e.key);
+          setKeyPressed(true);
+        }
       }
     };
 
@@ -230,7 +235,7 @@ const App: React.FC = () => {
       window.removeEventListener('keydown', handleSpacebarDown);
       window.removeEventListener('keyup', handleSpacebarUp);
     };
-  }, [isMoving, isSpacebarPressed, direction, lastDirection]);
+  }, [isMoving, isSpacebarPressed, direction, lastDirection, keyPressed]);
 
   // Handle move with faster speed when spacebar is held down
   useEffect(() => {
@@ -271,6 +276,7 @@ const App: React.FC = () => {
 
     setDirection(null);
     setLastDirection(null);
+    setKeyPressed(false);
 
     setIsMoving(false);
     setIsStarted(false);
@@ -300,12 +306,12 @@ const App: React.FC = () => {
             >
               Start Game
             </Button>
-            <button
-              className='how-to-play'
+            <Button
+              className={'select-form-btn how-to-play'}
               onClick={() => setInfo(info => !info)}
             >
               How to Play?
-            </button>
+            </Button>
           </div>
         )}
         {arr.length > 0 && arr[0].length > 0 && (
@@ -328,6 +334,7 @@ const App: React.FC = () => {
                       isSnake={cell === 1}
                       isHeadSnake={isHeadSnake}
                       isSnack={snack?.x === i && snack?.y === j}
+                      lastKey={direction}
                     />
                   );
                 })}

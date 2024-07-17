@@ -3,7 +3,7 @@ import React from 'react';
 const Info: React.FC = () => {
   return (
     <div className='div-info'>
-      <h2>How to play?</h2>
+      <h2>How to Play?</h2>
       <div>
         <p>
           <strong>W or &uarr;</strong>

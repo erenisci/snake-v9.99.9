@@ -7,7 +7,7 @@ interface Props {
 const PointSummary: React.FC<Props> = ({ children }) => {
   return (
     <div className='summary-container absolute'>
-      <h1 className='summary-title'>Summary</h1>
+      <h1 className='summary summary-title'>Summary</h1>
       {children}
     </div>
   );
