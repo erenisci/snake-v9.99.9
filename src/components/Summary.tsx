@@ -6,16 +6,17 @@ interface Props {
     size: number;
     date: Date;
   };
+  style: string;
 }
 
-const Summary: React.FC<Props> = ({ summary }) => {
+const Summary: React.FC<Props> = ({ summary, style }) => {
   const formattedDate =
     summary.date instanceof Date
       ? summary.date.toLocaleDateString()
       : 'Invalid Date';
 
   return (
-    <div className='summary'>
+    <div className={`summary ${style}`}>
       <p className='summary--p'>
         <span>Size: {`${summary.size}x${summary.size}`}</span>
         <span>Points: {summary.point}</span>

@@ -1,9 +1,10 @@
 import React from 'react';
+
 import Button from './Button';
 
 interface Props {
   message: string;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const GameEnds: React.FC<Props> = ({ message, onClick }) => {

@@ -4,7 +4,7 @@ interface Props {
   isSnake: boolean;
   isHeadSnake: boolean;
   isSnack: boolean;
-  lastKey?: string | null;
+  lastKey: string | null;
 }
 
 const Cells: React.FC<Props> = ({ isSnake, isHeadSnake, isSnack, lastKey }) => {
@@ -29,7 +29,7 @@ const Cells: React.FC<Props> = ({ isSnake, isHeadSnake, isSnack, lastKey }) => {
         <>
           <div className={`eye left-eye--${lastKey}`}></div>
           <div className={`eye right-eye--${lastKey}`}></div>
-          <div className={`tongue--${lastKey}`}></div>
+          <div className={`mouth--${lastKey}`}></div>
         </>
       )}
     </div>

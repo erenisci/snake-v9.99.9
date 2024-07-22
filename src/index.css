@@ -33,8 +33,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 0;
-  background: transparent;
+  display: none;
 }
 
 .container {
@@ -143,6 +142,12 @@ body {
   position: relative;
 }
 
+.cell {
+  width: 24px;
+  height: 24px;
+  background-color: var(--main-c);
+}
+
 .div-info {
   display: flex;
   flex-direction: column;
@@ -236,7 +241,6 @@ body {
   padding: 0.4rem;
   border: 1px solid var(--main-c);
   height: 27.8rem;
-  overflow-y: scroll;
 }
 
 .summary-title {
@@ -246,8 +250,18 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 0.8rem;
   border: 1px solid var(--main-c);
+}
+
+.summary-container--sums {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  background-color: var(--board-c);
+  border: 1px solid var(--main-c);
+  height: 27.8rem;
+  overflow-y: scroll;
 }
 
 .summary {
@@ -256,8 +270,16 @@ body {
   justify-content: center;
   gap: 0.6rem;
   padding: 0.9rem;
+  background-color: var(--background-c-dark);
+  color: var(--white-light);
+}
+
+.zero {
   background-color: var(--main-c);
-  color: var(--white);
+}
+
+.one {
+  background-color: var(--board-c);
 }
 
 .summary--p {
@@ -267,12 +289,6 @@ body {
 
 .date {
   align-self: center;
-}
-
-.cell {
-  width: 24px;
-  height: 24px;
-  background-color: var(--main-c);
 }
 
 .snack {
@@ -324,7 +340,7 @@ body {
   right: 20%;
 }
 
-.tongue--w {
+.mouth--w {
   border: 1px solid var(--white);
   position: absolute;
   top: 4px;
@@ -345,7 +361,7 @@ body {
   right: 20%;
 }
 
-.tongue--a {
+.mouth--a {
   border: 1px solid var(--white);
   position: absolute;
   top: 50%;
@@ -366,7 +382,7 @@ body {
   right: 20%;
 }
 
-.tongue--s {
+.mouth--s {
   border: 1px solid var(--white);
   position: absolute;
   bottom: 4px;
@@ -387,7 +403,7 @@ body {
   left: 20%;
 }
 
-.tongue--d {
+.mouth--d {
   border: 1px solid var(--white);
   position: absolute;
   top: 50%;

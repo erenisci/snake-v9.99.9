@@ -39,7 +39,13 @@ const App: React.FC = () => {
   const [screenAlert, setScreenAlert] = useState<string>('');
   const [summary, setSummary] = useState<SummaryProp[]>(() => {
     const storedSummary = localStorage.getItem('snakeGameSummary');
-    return storedSummary ? JSON.parse(storedSummary) : [];
+    if (storedSummary) {
+      return JSON.parse(storedSummary).map((entry: any) => ({
+        ...entry,
+        date: new Date(entry.date),
+      }));
+    }
+    return [];
   });
 
   const [info, setInfo] = useState(false);
@@ -170,7 +176,7 @@ const App: React.FC = () => {
     setSnake(newSnake);
     setArr(newArr);
     setLastDirection(direction);
-  }, [snake, snack, point, arr, direction, summary]);
+  }, [arr, snake, snack, direction, point, summary]);
 
   // Keyboard events
   useEffect(() => {
@@ -235,7 +241,7 @@ const App: React.FC = () => {
       window.removeEventListener('keydown', handleSpacebarDown);
       window.removeEventListener('keyup', handleSpacebarUp);
     };
-  }, [isMoving, isSpacebarPressed, direction, lastDirection, keyPressed]);
+  }, [direction, lastDirection, keyPressed, isMoving, isSpacebarPressed]);
 
   // Handle move with faster speed when spacebar is held down
   useEffect(() => {
@@ -249,23 +255,15 @@ const App: React.FC = () => {
 
       return () => clearInterval(interval);
     }
-  }, [isMoving, isSpacebarPressed, moveSnake, arr.length]);
-
-  // Load summary from local storage on mount
-  useEffect(() => {
-    const storedSummary = localStorage.getItem('snakeGameSummary');
-    if (storedSummary) {
-      const parsedSummary = JSON.parse(storedSummary).map((entry: any) => ({
-        ...entry,
-        date: new Date(entry.date),
-      }));
-      setSummary(parsedSummary);
-    }
-  }, []);
+  }, [isMoving, isSpacebarPressed, moveSnake]);
 
   // Save summary to local storage when it changes
   useEffect(() => {
-    localStorage.setItem('snakeGameSummary', JSON.stringify(summary));
+    const formattedSummary = summary.map(entry => ({
+      ...entry,
+      date: entry.date.toISOString(),
+    }));
+    localStorage.setItem('snakeGameSummary', JSON.stringify(formattedSummary));
   }, [summary]);
 
   // Handle play again action
@@ -293,17 +291,11 @@ const App: React.FC = () => {
       <div className='container-main'>
         <h1 className='title'>Snake Game v9.99.9</h1>
         {!isStarted && (
-          <Form
-            selectElement={selectElement}
-            onClick={handleInitializeArray}
-          />
+          <Form selectElement={selectElement} onClick={handleInitializeArray} />
         )}
         {arr.length > 1 && !isStarted && (
           <div className='button-start start-margin-top '>
-            <Button
-              className='select-form-btn'
-              onClick={handleGame}
-            >
+            <Button className='select-form-btn' onClick={handleGame}>
               Start Game
             </Button>
             <Button
@@ -318,10 +310,7 @@ const App: React.FC = () => {
           <GameBoard>
             {info && <Info />}
             {screenAlert && (
-              <GameEnds
-                message={screenAlert}
-                onClick={handlePlayAgain}
-              />
+              <GameEnds message={screenAlert} onClick={handlePlayAgain} />
             )}
             {arr.map((row, i) => (
               <CellRows key={i}>
@@ -349,6 +338,7 @@ const App: React.FC = () => {
             summary.map((item, i) => (
               <Summary
                 summary={item}
+                style={`${i % 2 === 0 ? 'zero' : 'one'}`}
                 key={i}
               />
             ))}
